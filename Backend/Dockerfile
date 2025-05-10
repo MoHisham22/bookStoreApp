@@ -1,20 +1,23 @@
-# Use official Node.js 18 image
+# Use lightweight Node.js 18 image
 FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files first for better caching
+# Install dependencies first for better caching
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install --production
 
-# Copy all application files
+# Copy application files
 COPY . .
 
-# Expose the application port
+# Set environment variables
+ENV PORT=4001
+ENV NODE_ENV=production
+ENV MONGO_URL=mongodb://mongo:27017/etshostore
+
+# Expose port
 EXPOSE 4001
 
-# Start the application
+# Start application
 CMD ["npm", "start"]
